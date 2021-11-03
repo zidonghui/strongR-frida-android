@@ -1,6 +1,6 @@
 ---
 name: New Version
-about: 请求构建制定Frida版本
+about: 请求构建指定Frida版本
 title: "[VERSION]"
 labels: version
 assignees: ''

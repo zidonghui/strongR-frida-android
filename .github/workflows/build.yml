@@ -124,6 +124,7 @@ jobs:
           tag_name: "${{ needs.check_version.outputs.FRIDA_VERSION }}"
           release_name: "${{ needs.check_version.outputs.FRIDA_VERSION }}"
           prerelease: false
+          body: "[frida/frida版本](https://github.com/frida/frida/releases/tag/${{ needs.check_version.outputs.FRIDA_VERSION }})"
 
   android_build:
     runs-on: ubuntu-20.04

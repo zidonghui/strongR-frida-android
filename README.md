@@ -6,6 +6,14 @@ Follow [FRIDA](https://github.com/frida/frida) upstream to automatic patch and b
 
 **Hint: Don't fork this repository**
 
+## 构建指定版本frida
+
+[创建新的issues](https://github.com/anjia0532/strongR-frida-android/issues/new/choose) 选择 `New Version` 模板
+
+标题格式为 `[VERSION]frida版本号`，别自己瞎搞，以 [https://github.com/frida/frida/tags](https://github.com/frida/frida/tags) 为准,一般类似 `15.1.19` 这样
+
+可以参考 [已有请求编译版本集锦](https://github.com/anjia0532/strongR-frida-android/issues?q=is%3Aissue+label%3Aversion+)
+
 ## Patchs
 
 [Git Patch Files](https://github.com/AAAA-Project/Patchs/tree/master/strongR-frida/frida-core)
@@ -23,7 +31,7 @@ Follow [FRIDA](https://github.com/frida/frida) upstream to automatic patch and b
 
 ## Download
 
-[Latest Release](https://github.com/hluwa/strongR-frida-android/releases/latest)
+[Latest Release](https://github.com/anjia0532/strongR-frida-android/releases/latest)
 
 ## References
 
