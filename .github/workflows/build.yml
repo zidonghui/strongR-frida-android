@@ -30,8 +30,8 @@ jobs:
                 labels: "version"
             })
 
-            console.log("Frida Version from issues is ", issuesResponse["data"])
             let ver
+            let issue_number = -1
             if (Array.isArray(issuesResponse["data"]) && issuesResponse["data"].length) {
               let title = issuesResponse["data"][0]["title"]
               let start = 0
@@ -39,9 +39,11 @@ jobs:
                   start = 9
               }
               ver = issuesResponse["data"][0]["title"].substring(start).trim()
+              issue_number = issuesResponse["data"][0]["number"]
             }
             console.log("Frida Version from issues is ", ver)
-            core.setOutput('FRIDA_VERSION', ver);
+            core.setOutput('FRIDA_VERSION', ver)
+            core.setOutput('ISSUE_NUMBER', issue_number)
 
       - name: Pull Frida Latest Release
         id: pullFridaLatestRelease
@@ -83,6 +85,16 @@ jobs:
               } = releaseResponse;
               if (ver == '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'){
                   core.setOutput('ALREADY_RELEASE', '1');
+                  if (${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }} > 0){
+                    const issuesResponse =  await github.issues.update({
+                      owner: '${{ secrets.GIT_OWNER }}',
+                      repo: '${{ secrets.GIT_REPO }}',
+                      issue_number: ${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }},
+                      state: "closed"
+                      body: "https://github.com/${{ secrets.GIT_OWNER }}/${{ secrets.GIT_REPO }}/releases/tag/${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}"
+                    })
+                    console.log("update issues resp:",issuesResponse)
+                  }
               }
               else{
                   core.setOutput('ALREADY_RELEASE', '0');
