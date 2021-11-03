@@ -14,6 +14,12 @@ Follow [FRIDA](https://github.com/frida/frida) upstream to automatic patch and b
 
 可以参考 [已有请求编译版本集锦](https://github.com/anjia0532/strongR-frida-android/issues?q=is%3Aissue+label%3Aversion+)
 
+**注意:**
+
+本项目这是提供构建，完全依赖于 [Git Patch Files](https://github.com/AAAA-Project/Patchs/tree/master/strongR-frida/frida-core)
+
+如果patch失败，请去[Git Patch Files](https://github.com/AAAA-Project/Patchs/tree/master/strongR-frida/frida-core) 提issues，本人无力解决这个问题。
+
 ## Patchs
 
 [Git Patch Files](https://github.com/AAAA-Project/Patchs/tree/master/strongR-frida/frida-core)
