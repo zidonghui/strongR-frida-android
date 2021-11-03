@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-20.04
     
     outputs:
-      FRIDA_VERSION: ${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}
+      FRIDA_VERSION: ${{ secrets.TAG:-${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }} }}
       ALREADY_RELEASE: ${{ steps.checkReleaseVersion.outputs.ALREADY_RELEASE }}
     steps:
       - name: Pull Frida Latest Release
@@ -33,6 +33,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            console.log("FRIDA_VERSION:",'${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}')
             try {
               const releaseVersion = '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'
               const releaseResponse = await github.repos.getReleaseByTag({
