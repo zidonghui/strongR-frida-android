@@ -17,7 +17,7 @@ jobs:
       FRIDA_VERSION: ${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}
       ALREADY_RELEASE: ${{ steps.checkReleaseVersion.outputs.ALREADY_RELEASE }}
     steps:
-      - name: Check ${{ secrets.GITHUB_REPOSITORY }}'s version issues
+      - name: Check '${{ secrets.GITHUB_REPOSITORY }}'`s version issues
         id: pullIssuesVersion
         uses: actions/github-script@v3.1.0
         with:
@@ -29,7 +29,7 @@ jobs:
                 state: "open",
                 labels: "version"
             })
-            const ver
+            let ver
             if (Array.isArray(issuesResponse) && data.length) {
               let title = data[0]["title"]
               let start = 0
