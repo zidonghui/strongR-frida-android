@@ -3,6 +3,10 @@ name: strongR-frida
 on: 
   schedule:
     - cron: "0 9/12 * * *"
+  issues:
+    types: [opened]
+  label:
+    types: [created]
   workflow_dispatch:
   
 jobs:
@@ -13,20 +17,48 @@ jobs:
       FRIDA_VERSION: ${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}
       ALREADY_RELEASE: ${{ steps.checkReleaseVersion.outputs.ALREADY_RELEASE }}
     steps:
+      - name: Check ${{ secrets.GITHUB_REPOSITORY }}'s version issues
+        id: pullIssuesVersion
+        uses: actions/github-script@v3.1.0
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const issuesResponse = await github.issues.listForRepo({
+                owner: '${{ secrets.GIT_OWNER }}',
+                repo: '${{ secrets.GIT_REPO }}',
+                state: "open",
+                labels: "version"
+            })
+            const ver
+            if (Array.isArray(issuesResponse) && data.length) {
+              let title = data[0]["title"]
+              let start = 0
+              if (title.includes("[VERSION]")){
+                  start = 9
+              }
+              ver = data[0]["title"].substring(start).trim()
+            }
+            core.setOutput('FRIDA_VERSION', ver);
+
       - name: Pull Frida Latest Release
         id: pullFridaLatestRelease
         uses: actions/github-script@v3.1.0
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const releaseResponse = await github.repos.getLatestRelease({
-              owner: 'frida',
-              repo: 'frida',
-            })
-            const {
-              data: { tag_name: ver }
-            } = releaseResponse;
-            core.setOutput('FRIDA_VERSION', ver);
+            const releaseVersion = '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'
+            if (releaseVersion){
+              console.log("Frida Version From Issues is ", releaseVersion)
+            } else {
+              const releaseResponse = await github.repos.getLatestRelease({
+                owner: 'frida',
+                repo: 'frida',
+              })
+              const {
+                data: { tag_name: ver }
+              } = releaseResponse;
+              core.setOutput('FRIDA_VERSION', ver);
+            }
             
       - name: Check release version
         id: checkReleaseVersion
