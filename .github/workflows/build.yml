@@ -93,7 +93,7 @@ jobs:
                       state: 'closed',
                       body: 'https://github.com/${{ secrets.GIT_OWNER }}/${{ secrets.GIT_REPO }}/releases/tag/${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'
                     })
-                    console.log("update issues resp:",issuesResponse)
+                    console.log("update issues resp:", issuesResponse["status"] == 200 ? "success" : "failed" )
                   }
               }
               else{
