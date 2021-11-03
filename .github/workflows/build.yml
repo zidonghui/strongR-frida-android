@@ -29,6 +29,8 @@ jobs:
                 state: "open",
                 labels: "version"
             })
+
+            console.log("Frida Version from issues is ", issuesResponse)
             let ver
             if (Array.isArray(issuesResponse) && data.length) {
               let title = data[0]["title"]
@@ -59,6 +61,7 @@ jobs:
               const {
                 data: { tag_name: ver }
               } = releaseResponse;
+              console.log("Frida Version From Frida repo LastRelease is ", ver)
               core.setOutput('FRIDA_VERSION', ver);
             }
             
