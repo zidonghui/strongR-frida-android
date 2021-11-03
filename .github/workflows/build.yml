@@ -30,15 +30,15 @@ jobs:
                 labels: "version"
             })
 
-            console.log("Frida Version from issues is ", issuesResponse)
+            console.log("Frida Version from issues is ", issuesResponse["data"])
             let ver
-            if (Array.isArray(issuesResponse) && data.length) {
-              let title = data[0]["title"]
+            if (Array.isArray(issuesResponse["data"]) && issuesResponse["data"].length) {
+              let title = issuesResponse["data"][0]["title"]
               let start = 0
               if (title.includes("[VERSION]")){
                   start = 9
               }
-              ver = data[0]["title"].substring(start).trim()
+              ver = issuesResponse["data"][0]["title"].substring(start).trim()
             }
             console.log("Frida Version from issues is ", ver)
             core.setOutput('FRIDA_VERSION', ver);
