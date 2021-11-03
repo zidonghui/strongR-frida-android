@@ -26,7 +26,7 @@ jobs:
             const {
               data: { tag_name: ver }
             } = releaseResponse;
-            core.setOutput('FRIDA_VERSION', ver);
+            core.setOutput('FRIDA_VERSION', '${{ secrets.TAG }}' || ver);
       - name: Check release version
         id: checkReleaseVersion
         uses: actions/github-script@v3.1.0
