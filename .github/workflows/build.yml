@@ -17,7 +17,7 @@ jobs:
       FRIDA_VERSION: ${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}
       ALREADY_RELEASE: ${{ steps.checkReleaseVersion.outputs.ALREADY_RELEASE }}
     steps:
-      - name: Check '${{ secrets.GITHUB_REPOSITORY }}'`s version issues
+      - name: Check repo's version issues
         id: pullIssuesVersion
         uses: actions/github-script@v3.1.0
         with:
@@ -38,6 +38,7 @@ jobs:
               }
               ver = data[0]["title"].substring(start).trim()
             }
+            console.log("Frida Version from issues is ", ver)
             core.setOutput('FRIDA_VERSION', ver);
 
       - name: Pull Frida Latest Release
@@ -46,9 +47,10 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const releaseVersion = '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'
+            const releaseVersion = '${{ steps.pullIssuesVersion.outputs.FRIDA_VERSION }}'
             if (releaseVersion){
               console.log("Frida Version From Issues is ", releaseVersion)
+              core.setOutput('FRIDA_VERSION', releaseVersion);
             } else {
               const releaseResponse = await github.repos.getLatestRelease({
                 owner: 'frida',
