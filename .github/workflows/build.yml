@@ -90,24 +90,23 @@ jobs:
               else{
                   core.setOutput('ALREADY_RELEASE', '0');
               }
-
-              if (${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }} > 0){
-                const issuesComment = await github.issues.createComment({
-                    owner: '${{ secrets.GIT_OWNER }}',
-                    repo: '${{ secrets.GIT_REPO }}',
-                    issue_number: ${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }},
-                    body: '构建进展 [https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ github.run_id }}](https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ github.run_id }})\n\n知识星球:\n\n <img src = https://raw.githubusercontent.com/anjia0532/strongR-frida-android/main/img/zsxq.jpg width=300px />'
-                });
-                console.log("create issues comment resp:",issuesComment["status"])
-              }
             } catch (e) {
-              console.log(e)
               if(e.message == 'Not Found'){
                 core.setOutput('ALREADY_RELEASE', '0');
               }
               else{
                 core.setFailed(e.message);
               }
+            }
+
+            if (${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }} > 0){
+              const issuesComment = await github.issues.createComment({
+                  owner: '${{ secrets.GIT_OWNER }}',
+                  repo: '${{ secrets.GIT_REPO }}',
+                  issue_number: ${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }},
+                  body: '构建进展 [https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ github.run_id }}](https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ github.run_id }})\n\n知识星球:\n\n <img src = https://raw.githubusercontent.com/anjia0532/strongR-frida-android/main/img/zsxq.jpg width=300px />'
+              });
+              console.log("create issues comment resp:",issuesComment["status"])
             }
   create_release:
     needs: check_version
