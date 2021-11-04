@@ -85,16 +85,6 @@ jobs:
               } = releaseResponse;
               if (ver == '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'){
                   core.setOutput('ALREADY_RELEASE', '1');
-                  if (${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }} > 0){
-                    const issuesResponse =  await github.issues.update({
-                      owner: '${{ secrets.GIT_OWNER }}',
-                      repo: '${{ secrets.GIT_REPO }}',
-                      issue_number: ${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }},
-                      state: 'closed',
-                      body: 'https://github.com/${{ secrets.GIT_OWNER }}/${{ secrets.GIT_REPO }}/releases/tag/${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'
-                    })
-                    console.log("update issues resp:", issuesResponse["status"] == 200 ? "success" : "failed" )
-                  }
               }
               else{
                   core.setOutput('ALREADY_RELEASE', '0');
@@ -107,8 +97,7 @@ jobs:
                 core.setFailed(e.message);
               }
             }
-     
-     
+
   create_release:
     needs: check_version
     runs-on: ubuntu-20.04
@@ -124,7 +113,7 @@ jobs:
           tag_name: "${{ needs.check_version.outputs.FRIDA_VERSION }}"
           release_name: "${{ needs.check_version.outputs.FRIDA_VERSION }}"
           prerelease: false
-          body: "[frida/frida版本](https://github.com/frida/frida/releases/tag/${{ needs.check_version.outputs.FRIDA_VERSION }})"
+          body: "[https://github.com/frida/frida/releases/tag/${{ needs.check_version.outputs.FRIDA_VERSION }}](https://github.com/frida/frida/releases/tag/${{ needs.check_version.outputs.FRIDA_VERSION }})<br/>\n知识星球:![知识星球](https://raw.githubusercontent.com/anjia0532/strongR-frida-android/main/img/zsxq.jpg)"
 
   android_build:
     runs-on: ubuntu-20.04
@@ -242,3 +231,25 @@ jobs:
         asset_path: '${{ github.workspace }}/frida/build/frida-android-x86_64/bin/frida-server'
         asset_name: 'hluda-server-${{ needs.check_version.outputs.FRIDA_VERSION }}-android-x86_64'
         asset_content_type: application/octet-stream
+
+    - name: Close Version Issues
+      uses: actions/github-script@v3.1.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          if (${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }} > 0){
+            const issuesResponse =  await github.issues.update({
+              owner: '${{ secrets.GIT_OWNER }}',
+              repo: '${{ secrets.GIT_REPO }}',
+              issue_number: ${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }},
+              state: 'closed'
+            })
+            console.log("update issues resp:", issuesResponse["status"] == 200 ? "success" : "failed" )
+
+            await github.issues.createComment({
+                owner: '${{ secrets.GIT_OWNER }}',
+                repo: '${{ secrets.GIT_REPO }}',
+                issue_number: ${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }},
+                body: '构建结果 [https://github.com/${{ secrets.GIT_OWNER }}/${{ secrets.GIT_REPO }}/releases/tag/${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}](https://github.com/${{ secrets.GIT_OWNER }}/${{ secrets.GIT_REPO }}/releases/tag/${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }})<br/>\n知识星球:![知识星球](https://raw.githubusercontent.com/anjia0532/strongR-frida-android/main/img/zsxq.jpg)'
+            });
+          }
