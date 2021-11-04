@@ -95,12 +95,10 @@ jobs:
                     owner: '${{ secrets.GIT_OWNER }}',
                     repo: '${{ secrets.GIT_REPO }}',
                     issue_number: ${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }},
-                    body: '构建进展 [https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ env.GITHUB_RUN_ID }}](https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ env.GITHUB_RUN_ID }})<br/>\n知识星球:![知识星球](https://raw.githubusercontent.com/anjia0532/strongR-frida-android/main/img/zsxq.jpg)'
+                    body: '构建进展 [https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ github.run_id }}](https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ github.run_id }})<br/>\n知识星球:![知识星球](https://raw.githubusercontent.com/anjia0532/strongR-frida-android/main/img/zsxq.jpg)'
                 });
               }
-              console.log("env.GITHUB_RUN_ID:","${{env.GITHUB_RUN_ID}}")
-              console.log("env.GITHUB_JOB:","${{env.GITHUB_JOB}}")
-              console.log("env.GITHUB_RUN_NUMBER:","${{env.GITHUB_RUN_NUMBER}}")
+              console.log("github.run_id:","${{ github.run_id }}")
             } catch (e) {
               if(e.message == 'Not Found'){
                 core.setOutput('ALREADY_RELEASE', '0');
