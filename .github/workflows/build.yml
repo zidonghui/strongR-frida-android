@@ -28,7 +28,10 @@ jobs:
                 owner: '${{ secrets.GIT_OWNER }}',
                 repo: '${{ secrets.GIT_REPO }}',
                 state: "open",
-                labels: "version"
+                labels: "version",
+                sort: "created",
+                direction: "desc",
+                per_page: 1
             })
 
             let ver
