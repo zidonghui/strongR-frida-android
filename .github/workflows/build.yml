@@ -126,7 +126,7 @@ jobs:
           tag_name: "${{ needs.check_version.outputs.FRIDA_VERSION }}"
           release_name: "${{ needs.check_version.outputs.FRIDA_VERSION }}"
           prerelease: false
-          body: "[Frida ${{ needs.check_version.outputs.FRIDA_VERSION }}](https://github.com/frida/frida/releases/tag/${{ needs.check_version.outputs.FRIDA_VERSION }})<br/>\n知识星球:![知识星球](https://raw.githubusercontent.com/anjia0532/strongR-frida-android/main/img/zsxq.jpg)"
+          body: "[Frida ${{ needs.check_version.outputs.FRIDA_VERSION }}](https://github.com/frida/frida/releases/tag/${{ needs.check_version.outputs.FRIDA_VERSION }})\n\n知识星球:\n\n <img src= https://raw.githubusercontent.com/anjia0532/strongR-frida-android/main/img/zsxq.jpg width=300px />"
 
   android_build:
     runs-on: ubuntu-20.04
