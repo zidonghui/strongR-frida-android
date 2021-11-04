@@ -97,7 +97,7 @@ jobs:
                     issue_number: ${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }},
                     body: '构建进展 [https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ github.run_id }}](https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ github.run_id }})\n\n知识星球:\n\n <img src = https://raw.githubusercontent.com/anjia0532/strongR-frida-android/main/img/zsxq.jpg width=300px />'
                 });
-                console.log(issuesComment)
+                console.log("create issues comment resp:",issuesComment["status"])
               }
             } catch (e) {
               console.log(e)
