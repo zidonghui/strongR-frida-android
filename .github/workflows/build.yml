@@ -111,7 +111,9 @@ jobs:
               });
               console.log("create issues comment resp:",issuesComment["status"])
 
-              if ('${{ needs.check_version.outputs.ALREADY_RELEASE }}' == '1'){
+              const releaseVersion = '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'
+
+              if (core.getOutput('ALREADY_RELEASE') == '1'){
                 const issuesResponse =  await github.issues.update({
                   owner: '${{ secrets.GIT_OWNER }}',
                   repo: '${{ secrets.GIT_REPO }}',
