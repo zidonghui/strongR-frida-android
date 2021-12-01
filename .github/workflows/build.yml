@@ -77,6 +77,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            let alreadyRelease = false;
             try {
               const releaseVersion = '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'
               const releaseResponse = await github.repos.getReleaseByTag({
@@ -87,7 +88,6 @@ jobs:
               const {
                 data: { tag_name: ver }
               } = releaseResponse;
-              let alreadyRelease = false;
               if (ver == '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'){
                   core.setOutput('ALREADY_RELEASE', '1');
                   alreadyRelease = true;
