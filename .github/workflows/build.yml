@@ -33,7 +33,6 @@ jobs:
                 direction: "desc",
                 per_page: 1
             })
-
             let ver
             let issue_number = -1
             if (Array.isArray(issuesResponse["data"]) && issuesResponse["data"].length) {
@@ -48,7 +47,6 @@ jobs:
             console.log("Frida Version from issues is ", ver)
             core.setOutput('FRIDA_VERSION', ver)
             core.setOutput('ISSUE_NUMBER', issue_number)
-
       - name: Pull Frida Latest Release
         id: pullFridaLatestRelease
         uses: actions/github-script@v3.1.0
@@ -77,7 +75,6 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            let alreadyRelease = false;
             try {
               const releaseVersion = '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'
               const releaseResponse = await github.repos.getReleaseByTag({
@@ -90,7 +87,6 @@ jobs:
               } = releaseResponse;
               if (ver == '${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}'){
                   core.setOutput('ALREADY_RELEASE', '1');
-                  alreadyRelease = true;
               }
               else{
                   core.setOutput('ALREADY_RELEASE', '0');
@@ -103,7 +99,6 @@ jobs:
                 core.setFailed(e.message);
               }
             }
-
             if (${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }} > 0){
               const issuesComment = await github.issues.createComment({
                   owner: '${{ secrets.GIT_OWNER }}',
@@ -111,25 +106,7 @@ jobs:
                   issue_number: ${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }},
                   body: '构建进展 [https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ github.run_id }}](https://github.com/anjia0532/strongR-frida-android/actions/runs/${{ github.run_id }})\n\n知识星球:\n\n <img src = https://raw.githubusercontent.com/anjia0532/strongR-frida-android/main/img/zsxq.jpg width=300px />'
               });
-              console.log("create issues comment resp:",issuesComment["status"]);
-              if(alreadyRelease){
-                const issuesResponse =  await github.issues.update({
-                  owner: '${{ secrets.GIT_OWNER }}',
-                  repo: '${{ secrets.GIT_REPO }}',
-                  issue_number: ${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }},
-                  state: 'closed'
-                });
-                console.log("update issues resp:", issuesResponse["status"] == 200 ? "success" : "failed" );
-
-                
-                const issuesComment = await github.issues.createComment({
-                    owner: '${{ secrets.GIT_OWNER }}',
-                    repo: '${{ secrets.GIT_REPO }}',
-                    issue_number: ${{ steps.pullIssuesVersion.outputs.ISSUE_NUMBER }},
-                    body: '构建结果 [https://github.com/${{ secrets.GIT_OWNER }}/${{ secrets.GIT_REPO }}/releases/tag/${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }}](https://github.com/${{ secrets.GIT_OWNER }}/${{ secrets.GIT_REPO }}/releases/tag/${{ steps.pullFridaLatestRelease.outputs.FRIDA_VERSION }})<br/>\n知识星球::\n\n <img src = https://raw.githubusercontent.com/anjia0532/strongR-frida-android/main/img/zsxq.jpg width=300px />'
-                });
-                console.log("create issues comment resp:", issuesComment["status"] == 201 ? "success" : "failed" )
-              }
+              console.log("create issues comment resp:",issuesComment["status"])
             }
   create_release:
     needs: check_version
@@ -281,7 +258,6 @@ jobs:
                 state: 'closed'
               })
               console.log("update issues resp:", issuesResponse["status"] == 200 ? "success" : "failed" )
-
               const issuesComment = await github.issues.createComment({
                   owner: '${{ secrets.GIT_OWNER }}',
                   repo: '${{ secrets.GIT_REPO }}',
